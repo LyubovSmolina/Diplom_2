@@ -28,7 +28,8 @@ public class StepsForClientTests {
     public static void responseStatusAndBodyValidData(Response response) {
         response.then().statusCode(OK_200)
                 .and().assertThat().body("success", equalTo(true))
-                .and().assertThat().body("user", notNullValue());
+                .and().assertThat().body("user", notNullValue())
+                .and().assertThat().body("refreshToken", notNullValue());
     }
 
     @Step ("Получение токена учетной записи пользователя")
@@ -54,5 +55,46 @@ public class StepsForClientTests {
         response.then().statusCode(FORBIDDEN_403)
                 .and().assertThat().body("success", equalTo(false))
                 .and().assertThat().body("message", equalTo("Email, password and name are required fields"));
+    }
+
+    @Step ("Вход в существующую учетную запись пользователя")
+    public static Response logInAccount(ClientData client) {
+        Response responseLogIn = given().log().all()
+                .header("Content-type", "application/json")
+                .baseUri(baseURI)
+                .body(LogInData.from(client))
+                .when()
+                .post(LOG_IN_ACCOUNT);
+        return responseLogIn;
+    }
+
+    @Step ("Вход в учетную запись с невалидным значением ключа Email")
+    public static Response logInInvalidEmail(ClientData client) {
+        String json = "{\"login\": \"abra@pochta.ru\"," + "\"password\": \"" + client.getPassword() +"\" " +"}";
+        Response responseLogIn = given().log().all()
+                .header("Content-type", "application/json")
+                .baseUri(baseURI)
+                .body(json)
+                .when()
+                .post(LOG_IN_ACCOUNT);
+        return responseLogIn;
+    }
+    @Step ("Проверка статуса и кода ответа, 401 UNAUTHORIZED. Тело ответа содержит: false, email or password are incorrect.")
+    public static void responseStatusBodyLogInInvalidData(Response responseLogIn) {
+        responseLogIn.then().statusCode(UNAUTHORIZED_401)
+                .and().assertThat().body("success", equalTo(false))
+                .and().assertThat().body("message", equalTo("email or password are incorrect"));
+    }
+
+    @Step ("Вход в учетную запись с невалидным значением ключа Password")
+    public static Response logInInvalidPassword(ClientData client) {
+        String json = "{\"login\": \"" + client.getEmail() + "\", \"password\": \"111111\"" +"}";
+        Response responseLogIn = given().log().all()
+                .header("Content-type", "application/json")
+                .baseUri(baseURI)
+                .body(json)
+                .when()
+                .post(LOG_IN_ACCOUNT);
+        return responseLogIn;
     }
 }

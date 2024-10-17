@@ -9,6 +9,7 @@ public class CONST {
     public static int BAD_REQUEST_400 = 400;
     public static int NOT_FOUND_404 = 404;
     public static int FORBIDDEN_403 = 403;
+    public static int UNAUTHORIZED_401 = 401;
 
 
     //Константы ручек
