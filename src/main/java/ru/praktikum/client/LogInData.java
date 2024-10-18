@@ -31,6 +31,8 @@ public class LogInData {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    //Метод для авторизации пользователя, позволяет получить данные рандомного курьера для тела запроса
     public static LogInData from(ClientData client) {
         return new LogInData(client.getEmail(), client.getPassword());
     }

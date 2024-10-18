@@ -5,17 +5,15 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import ru.praktikum.client.LogInData;
+import ru.praktikum.client.StepsForClientTests;
 
 import static io.restassured.RestAssured.baseURI;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static ru.praktikum.CONST.*;
-import static ru.praktikum.client.StepsForClientTests.*;
+import static ru.praktikum.client.StatusCodeAndBodySteps.responseStatusAndBodyValidData;
+import static ru.praktikum.client.StatusCodeAndBodySteps.responseStatusBodyLogInInvalidData;
 
-public class LogInClientTest {
-    public String tokenForDel;
+
+public class LogInClientTest extends StepsForClientTests {
+
 
     @Before
     public void setUp() {
@@ -26,15 +24,7 @@ public class LogInClientTest {
     @DisplayName("Удаление учетной записи пользователя")
     public void deleteAccount() {
         if (tokenForDel != null) {
-            given().log().all()
-                    .header("Content-type", "application/json")
-                    .auth().oauth2(tokenForDel)
-                    .baseUri(baseURI)
-                    .when()
-                    .delete(DELETE_ACCOUNT)
-                    .then().log().all().assertThat()
-                    .statusCode(ACCEPT_202);
-            System.out.println("Учетная запись клиента успешно удалена");
+            deleteUser();
         }
     }
 
@@ -82,7 +72,5 @@ public class LogInClientTest {
         Response responseLogIn = logInInvalidPassword(client);
         responseStatusBodyLogInInvalidData(responseLogIn);
     }
-
-
 
 }

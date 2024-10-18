@@ -5,14 +5,13 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.praktikum.client.StepsForClientTests;
 import static io.restassured.RestAssured.baseURI;
-import static io.restassured.RestAssured.given;
-import static ru.praktikum.CONST.*;
-import static ru.praktikum.client.StepsForClientTests.*;
+import static ru.praktikum.client.StatusCodeAndBodySteps.*;
 
 
-public class CreateClientTest {
-   public String tokenForDel;
+public class CreateClientTest extends StepsForClientTests {
+
 
     @Before
     public void setUp() {
@@ -23,15 +22,7 @@ public class CreateClientTest {
     @DisplayName("Удаление учетной записи пользователя")
     public void deleteAccount() {
         if (tokenForDel != null) {
-            given().log().all()
-                    .header("Content-type", "application/json")
-                    .auth().oauth2(tokenForDel)
-                    .baseUri(baseURI)
-                    .when()
-                    .delete(DELETE_ACCOUNT)
-                    .then().log().all().assertThat()
-                    .statusCode(ACCEPT_202);
-            System.out.println("Учетная запись клиента успешно удалена");
+            deleteUser();
         }
     }
 

@@ -1,14 +1,8 @@
 package ru.praktikum.client;
 
-import io.qameta.allure.Step;
-import io.restassured.response.Response;
+
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
-import static io.restassured.RestAssured.baseURI;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static ru.praktikum.CONST.*;
+
 
 public class ClientData {
     private String email;
