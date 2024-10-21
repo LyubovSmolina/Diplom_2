@@ -3,13 +3,16 @@ package ru.praktikum.client;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 import static ru.praktikum.CONST.*;
 
 
 public class StepsForClientTests {
-    public String tokenForDel;
+    public static String tokenForDel;
 
 
     public void deleteUser() {

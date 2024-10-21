@@ -10,6 +10,9 @@ public class CONST {
     public static int NOT_FOUND_404 = 404;
     public static int FORBIDDEN_403 = 403;
     public static int UNAUTHORIZED_401 = 401;
+    public static int REDIRECT_301 = 301;
+    public static int INTERNAL_SERVER_ERROR_500 = 500;
+
 
 
     //Константы ручек
@@ -22,6 +25,6 @@ public class CONST {
 
     //Заказ
     public static String CREATE_ORDER_POST = "/api/orders"; //POST - создание заказа
-    public static String GET_USER_ORDERS_GET = "/api/orders"; //GET - получение списка заказов пользователя
-
+    public static String GET_USER_ORDERS_GET = "/api/orders";//GET - получение списка заказов пользователя
+    public static String GET_INGREDIENTS = "/api/ingredients";
 }
