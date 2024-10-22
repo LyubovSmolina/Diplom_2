@@ -2,14 +2,11 @@ package ru.praktikum;
 
 public class CONST {
     //Константы кодов ответа от бэкенда
-    public static int CREATED_201  = 201;
     public static int OK_200 = 200;
     public static int ACCEPT_202 = 202;
-    public static int CONFLICT_409 = 409;
     public static int BAD_REQUEST_400 = 400;
-    public static int NOT_FOUND_404 = 404;
     public static int FORBIDDEN_403 = 403;
-    public static int UNAUTHORIZED_401 = 401;
+    public static int UNAUTHORISED_401 = 401;
     public static int REDIRECT_301 = 301;
     public static int INTERNAL_SERVER_ERROR_500 = 500;
 
@@ -25,6 +22,6 @@ public class CONST {
 
     //Заказ
     public static String CREATE_ORDER_POST = "/api/orders"; //POST - создание заказа
-    public static String GET_USER_ORDERS_GET = "/api/orders";//GET - получение списка заказов пользователя
+    public static String GET_USER_ORDERS = "/api/orders";//GET - получение списка заказов пользователя
     public static String GET_INGREDIENTS = "/api/ingredients";
 }

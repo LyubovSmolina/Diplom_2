@@ -31,7 +31,7 @@ public class StatusCodeAndBodySteps {
     }
     @Step ("Проверка статуса и кода ответа, 401 UNAUTHORIZED. Тело ответа содержит: false, email or password are incorrect.")
     public static void responseStatusBodyLogInInvalidData(Response responseLogIn) {
-        responseLogIn.then().statusCode(UNAUTHORIZED_401)
+        responseLogIn.then().statusCode(UNAUTHORISED_401)
                 .and().assertThat().body("success", equalTo(false))
                 .and().assertThat().body("message", equalTo("email or password are incorrect"));
     }
@@ -50,7 +50,7 @@ public class StatusCodeAndBodySteps {
     }
     @Step ("Проверка статуса и кода ответа, 401 Unauthorised. Тело ответа содержит: success false; You should be authorised")
     public static void statusCodeBodyUnauthorized(Response responseUpdateData) {
-        responseUpdateData.then().statusCode(UNAUTHORIZED_401)
+        responseUpdateData.then().statusCode(UNAUTHORISED_401)
                 .and().assertThat().body("success", equalTo(false))
                 .and().assertThat().body("message", equalTo("You should be authorised"));
     }

@@ -18,10 +18,12 @@ public class CreateOrderTest extends StepsForClientTests {
     @DisplayName("Регистрация учетной записи пользователя")
     public void setUp() {
         baseURI = "https://stellarburgers.nomoreparties.site/";
+        // Создание клиента
         ClientData client = ClientData.newRandomClient();
         Response response = createNewClient(client);
         responseStatusAndBodyValidData(response);
 
+        //Получение токена клиента
         String token = getToken(response);
         tokenForDel = getTokenForDel(token);
     }
@@ -66,6 +68,7 @@ public class CreateOrderTest extends StepsForClientTests {
     @Test
     @DisplayName("Проверка получения ошибки 500 Internal server error при запросе с невалидным хешом ингридиента")
     public void createOrderWithInvalidHash () {
+        //Получение невалидного хэша ингридиента
         String invalidHash = responseOrderWithInvalidHash();
 
         String json = "{\"ingredients\": [\"" + invalidHash + "\"" + "]}";

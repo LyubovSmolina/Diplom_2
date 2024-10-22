@@ -3,8 +3,8 @@ package ru.praktikum.client;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
+import io.qameta.allure.Param;
+import static io.qameta.allure.model.Parameter.Mode.HIDDEN;
 
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
@@ -14,7 +14,7 @@ import static ru.praktikum.CONST.*;
 public class StepsForClientTests {
     public static String tokenForDel;
 
-
+    @Step("Удаление учетной записи пользователя")
     public void deleteUser() {
         given().log().all()
                 .header("Content-type", "application/json")
@@ -40,12 +40,13 @@ public class StepsForClientTests {
     }
 
 
-    @Step("Приведение токена к необходимому формату для последующего удаления тестового аккаунта")
-    public static String getTokenForDel(String token) {
+    //Добавлена анотация hidden к аргументу token - в отчете allure скрыт токен пользовтеля
+    @Step("Получение токена учетной записи пользователя")
+    public static String getTokenForDel(@Param(mode=HIDDEN)String token) {
         return StringUtils.substringAfter(token, " ");
     }
 
-    @Step("Получение токена учетной записи пользователя")
+
     public static String getToken(Response response) {
         String token = response.then().extract().path("accessToken");
         return token;
@@ -88,7 +89,7 @@ public class StepsForClientTests {
         return responseLogIn;
     }
 
-    @Step("Запрос с токеном на изменение электронной почты пользователя")
+    @Step("Patch запрос с токеном на изменение электронной почты пользователя")
     public Response updateClientEmail() {
         String emailUpdate = "updEmail@pochta.ru";
         String json = "{\"login\": \"" + emailUpdate + "\"}";
@@ -102,7 +103,7 @@ public class StepsForClientTests {
         return responseUpdateData;
     }
 
-    @Step("Запрос с токеном на изменение пароля учетной записи пользователя")
+    @Step("Patch запрос с токеном на изменение пароля учетной записи пользователя")
     public Response updateClientPassword() {
         String passwordUpdate = "111456";
         String json = "{\"password\": \"" + passwordUpdate + "\"}";
@@ -116,7 +117,7 @@ public class StepsForClientTests {
         return responseUpdateData;
     }
 
-    @Step("Запрос с токеном на изменение имени пользователя в его учетной записи")
+    @Step("Patch запрос с токеном на изменение имени пользователя в его учетной записи")
     public Response updateClientName() {
         String nameUpdate = "Mary";
         String json = "{\"name\": \"" + nameUpdate + "\"}";
@@ -130,7 +131,7 @@ public class StepsForClientTests {
         return responseUpdateData;
     }
 
-    @Step("Запрос с токеном на изменение электронного адреса пользователя и передача в теле запроса уже используемого адреса")
+    @Step("Patch запрос с токеном на изменение электронного адреса пользователя и передача в теле запроса уже используемого адреса")
     public Response responseUpdateIdenticalEmail(ClientData client) {
         String json = "{\"email\": \"" + client.getEmail() + "\"}";
         Response responseUpdateData = given().log().all()
@@ -143,7 +144,7 @@ public class StepsForClientTests {
         return responseUpdateData;
     }
 
-    @Step("Запрос без токена на изменение электронной почты пользователя")
+    @Step("Patch запрос без токена на изменение электронной почты пользователя")
     public static Response responseUpdateEmailUnauthorized() {
         String emailUpdate = "updEmail@pochta.ru";
         String json = "{\"login\": \"" + emailUpdate + "\"}";
@@ -156,7 +157,7 @@ public class StepsForClientTests {
         return responseUpdateData;
     }
 
-    @Step("Запрос без токена на изменение пароля пользователя")
+    @Step("Patch запрос без токена на изменение пароля пользователя")
     public static Response responseUpdatePasswordUnauthorized() {
         String passwordUpdate = "111456";
         String json = "{\"password\": \"" + passwordUpdate + "\"}";
@@ -169,7 +170,7 @@ public class StepsForClientTests {
         return responseUpdateData;
     }
 
-    @Step("Запрос без токена на изменение имени пользователя учетной записи")
+    @Step("Patch запрос без токена на изменение имени пользователя учетной записи")
     public static Response responseUpdateNameUnauthorized() {
         String nameUpdate = "Mary";
         String json = "{\"name\": \"" + nameUpdate + "\"}";

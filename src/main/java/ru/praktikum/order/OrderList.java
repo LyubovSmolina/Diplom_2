@@ -3,30 +3,17 @@ import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import ru.praktikum.client.StepsForClientTests;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import static io.restassured.RestAssured.baseURI;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static ru.praktikum.CONST.*;
 
-public class OrderList extends StepsForClientTests{
-    private List<String>  ingredients;
+public class OrderList extends StepsForClientTests {
 
 
-    public List<String> getIngredients() {
-        List<String> ingredients = given().log().all()
-                .header("Content-type", "application/json")
-                .baseUri(baseURI)
-                .when()
-                .get(GET_INGREDIENTS)
-                .then().extract().path("data._id");
-        return new ArrayList<>();
-    }
-
-    @Step("Запрос на получение хэша ингредиента")
+    @Step("Get запрос на получение хэша ингредиента")
     public String getIngredientHash() {
         List<String> ingredients = given().log().all()
                 .header("Content-type", "application/json")
@@ -41,7 +28,7 @@ public class OrderList extends StepsForClientTests{
     }
 
 
-    @Step("Запрос на создание заказа. Переданы: токен пользователя, хэш код ингредиента")
+    @Step("Post запрос на создание заказа. Переданы: токен пользователя, хэш код ингредиента")
     public static Response createOrderWithAuthAndIngredientHash(String json) {
         Response response = given().log().all()
                 .header("Content-type", "application/json")
@@ -61,7 +48,7 @@ public class OrderList extends StepsForClientTests{
                 .and().assertThat().body("name", notNullValue());
     }
 
-    @Step("Запрос на создание заказа, токен не передан. В теле запроса передан хэш код ингредиента")
+    @Step("Post запрос на создание заказа, токен не передан. В теле запроса передан хэш код ингредиента")
     public static Response createOrderWithoutAuthAndIngredientHash(String json) {
         Response response = given().log().all()
                 .header("Content-type", "application/json")
@@ -111,6 +98,40 @@ public class OrderList extends StepsForClientTests{
         response.then().statusCode(INTERNAL_SERVER_ERROR_500);
     }
 
+    @Step ("Get запрос на получение списка заказов авторизованного клиента")
+    public static Response getUserOrderListWithAuthorization() {
+        Response responseGetOrder = given().log().all()
+                .header("Content-type", "application/json")
+                .auth().oauth2(tokenForDel)
+                .baseUri(baseURI)
+                .when()
+                .get(GET_USER_ORDERS);
+        return responseGetOrder;
+    }
+
+    @Step ("Проверка статуса и кода ответа 200 OK, Тело ответа содержит: success true; информацию о заказе .")
+    public static void responseStatusBodyOrderListWithAuth(Response responseGetOrder) {
+        responseGetOrder.then().statusCode(OK_200)
+                .and().assertThat().body("success", equalTo(true))
+                .and().assertThat().body("orders.ingredients", notNullValue());
+    }
+
+    @Step ("Get запрос на получение списка заказов неавторизованного клиента")
+    public static Response getUserOrderListWithoutAuthorization() {
+        Response responseGetOrder = given().log().all()
+                .header("Content-type", "application/json")
+                .baseUri(baseURI)
+                .when()
+                .get(GET_USER_ORDERS);
+        return responseGetOrder;
+    }
+
+    @Step ("Проверка статуса и кода ответа 401 Unauthorised. Тело ответа содержит: success false; message: You should be authorised .")
+    public static void responseStatusBodyOrderListWithoutAuth(Response responseGetOrder) {
+        responseGetOrder.then().statusCode(UNAUTHORISED_401)
+                .and().assertThat().body("success", equalTo(false))
+                .and().assertThat().body("message", equalTo("You should be authorised"));
+    }
 
 
 }
